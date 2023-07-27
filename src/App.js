@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Sidebar from "./Sidebar";
+import { useEffect, useState } from 'react'
 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import WaitingUsers from "./routes/waitingApprovals/WaitingUsers"
+import WaitingProfiles from "./routes/waitingApprovals/WaitingProfiles"
+import GetAudit from "./routes/Audit.js"
+import { GetAudits } from "./utils/rest-calls";
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [audits, setAudits] = useState([""])
+  useEffect(()=>{
+    console.log('use effect');
+    GetAudits().then(audits=>setAudits(audits));
+  },[])
+return (
+	<Router>
+	<Sidebar />
+	<Routes>
+		<Route path='/audit' element={<GetAudit audits={audits}/>} />
+    <Route path='/waiting/users' element={<WaitingUsers/>}/>
+    <Route path='/waiting/profiles' element={<WaitingProfiles/>}/>
+	</Routes>
+	</Router>
+);
 }
 
 export default App;
