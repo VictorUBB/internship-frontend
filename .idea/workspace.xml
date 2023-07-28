@@ -1,28 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b650141a-d826-4b83-847d-65cf3a769371" name="Changes" comment="DASda">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_7_28_2023_11_45_AM_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_7_28_2023_11_45_AM__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Login.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/MainPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/api.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/CreateProfileHistory.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/CreateUserHistory.js" afterDir="false" />
+    <list default="true" id="b650141a-d826-4b83-847d-65cf3a769371" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SidebarData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/SidebarData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/Audit.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/Audit.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/Audit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/Audit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/createEntitys/CreateProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/createEntitys/CreateProfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/createEntitys/CreateUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/createEntitys/CreateUser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/rest-calls.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/rest-calls.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +12,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="FrontEnd" />
+        <entry key="$PROJECT_DIR$" value="FrontEndMontran" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -66,7 +46,7 @@
       <updated>1690453952370</updated>
       <workItem from="1690453958587" duration="1642000" />
       <workItem from="1690456002492" duration="116000" />
-      <workItem from="1690533807149" duration="341000" />
+      <workItem from="1690533807149" duration="929000" />
     </task>
     <task id="LOCAL-00001" summary="DASda">
       <created>1690454663163</created>
@@ -75,7 +55,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690454663163</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="DASda">
+      <created>1690534174064</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1690534174064</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
