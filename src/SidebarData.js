@@ -8,7 +8,7 @@ import * as RiIcons from "react-icons/ri";
 export const SidebarData = [
 {
 	title: "Waiting approvals",
-	path: "/waiting",
+	path: "/waiting/users",
 	icon: <IoIcons.IoIosCheckmarkCircleOutline />,
 	iconClosed: <RiIcons.RiArrowDownSFill />,
 	iconOpened: <RiIcons.RiArrowUpSFill />,

@@ -124,3 +124,52 @@ export function GetAllProfiles(){
         return Promise.reject(error);
     }); 
 }
+
+export function AddNewUser(newUser){
+    console.log("Transferd data:"+JSON.stringify(newUser));
+    let headers= new Headers();
+    headers.append('Accept','application/json');
+    headers.append('Content-Type','application/json');
+    let init={method:'POST',
+    headers: headers,
+    mode:'cors',
+    body:JSON.stringify(newUser)
+    };
+    let url=APP_BASE_URL+'users/save';
+    let request= new Request(url,init);
+    return fetch(request)
+    .then(status)
+    .then(json)
+    .then(data=>{
+        console.log("Request succeeded",data);
+        return data;
+    }) .catch(error=>{
+        console.log("Error"+error);
+        return Promise.reject(error);
+    }); 
+}
+export function AddNewProfile(newProfile){
+    console.log("Transferd data:"+JSON.stringify(newProfile));
+    let headers= new Headers();
+    headers.append('Accept','application/json');
+    headers.append('Content-Type','application/json');
+    let init={method:'POST',
+    headers: headers,
+    mode:'cors',
+    body:JSON.stringify(newProfile)
+    };
+    let url=APP_BASE_URL+'profiles/create';
+    let request= new Request(url,init);
+    return fetch(request)
+    .then(status)
+    .then(json)
+    .then(data=>{
+        console.log("Request succeeded",data);
+        return data;
+    }) .catch(error=>{
+        console.log("Error"+error);
+        return Promise.reject(error);
+    }); 
+}
+
+

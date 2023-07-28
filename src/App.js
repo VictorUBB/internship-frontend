@@ -9,8 +9,8 @@ import WaitingProfiles from "./routes/waitingApprovals/WaitingProfiles"
 import GetAudit from "./routes/Audit.js"
 import ReactDOM from "react-dom";
 import CreateUser  from "./routes/createEntitys/CreateUser";
-import {CreateProfile} from "./routes/createEntitys/CreateProfile";
-import { GetAudits,GetHistoryByAuditId,GetProfileById,GetUserById,GetAllProfiles } from "./utils/rest-calls";
+import CreateProfile from "./routes/createEntitys/CreateProfile";
+import { GetAudits,GetHistoryByAuditId,GetProfileById,GetUserById,GetAllProfiles,AddNewProfile, AddNewUser } from "./utils/rest-calls";
 import Login from "./Login";
 import MainPage from "./MainPage";
 function App() {
@@ -44,7 +44,7 @@ function getHistoryById(id){
   .then(hist => {
     console.log('Fetched history:', hist);
     if(hist.typeEntity=="Profile"){
-      GetProfileById(hist.idEntity).then(
+      GetProfileById(hist.idEntityHistory).then(
         profileData=>{
           renderProfileHistory(profileData,'historyColumn')
         }
@@ -52,7 +52,7 @@ function getHistoryById(id){
       
     }
     else{
-     GetUserById(hist.idEntity).then(
+     GetUserById(hist.idEntityHistory).then(
         userData=>{
           renderUserHistory(userData,'historyColumn')
         }
@@ -76,8 +76,8 @@ return (
 		<Route path='/audit' element={<GetAudit audits={audits} getFunction={getHistoryById}/>} />
     <Route path='/waiting/users' element={<WaitingUsers/>}/>
     <Route path='/waiting/profiles' element={<WaitingProfiles/>}/>
-    <Route path="/create/users" element={<CreateUser profiles={profiles}/>}/>
-    <Route path="/create/profile" element={<CreateProfile/>}/>
+    <Route path="/create/users" element={<CreateUser profiles={profiles}  addFunction={AddNewUser}/>}/>
+    <Route path="/create/profile" element={<CreateProfile addFunction={AddNewProfile}/>}/>
   </Routes>
 	</div>
 );

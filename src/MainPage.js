@@ -11,8 +11,8 @@ import WaitingProfiles from "./routes/waitingApprovals/WaitingProfiles"
 import GetAudit from "./routes/Audit.js"
 import ReactDOM from "react-dom";
 import CreateUser  from "./routes/createEntitys/CreateUser";
-import {CreateProfile} from "./routes/createEntitys/CreateProfile";
-import { GetAudits,GetHistoryByAuditId,GetProfileById,GetUserById,GetAllProfiles } from "./utils/rest-calls";
+import CreateProfile from "./routes/createEntitys/CreateProfile";
+import { GetAudits,GetHistoryByAuditId,GetProfileById,GetUserById,GetAllProfiles,AddNewProfile } from "./utils/rest-calls";
 
 const MainPage = () => {
    const [audits, setAudits] = useState([]);
@@ -78,7 +78,7 @@ function getHistoryById(id){
 		<Route path='/audit' element={<GetAudit audits={audits} getFunction={getHistoryById}/>} />
     <Route path='/waiting/users' element={<WaitingUsers/>}/>
     <Route path='/waiting/profiles' element={<WaitingProfiles/>}/>
-    <Route path="/create/users" element={<CreateUser profiles={profiles}/>}/>
+    <Route path="/create/users" element={<CreateUser profiles={profiles} currentUser={user} addFunction={AddNewProfile}/>}/>
     <Route path="/create/profile" element={<CreateProfile/>}/>
        </Routes>
      </div>
