@@ -1,0 +1,664 @@
+Index: src/routes/Audit.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\r\nimport './Audit.css'\r\n\r\nexport const Audit = () => {\r\n    return (\r\n        <div className=\"header\">\r\n        <h1>Audit and History</h1>\r\n        </div>\r\n    );\r\n    };\r\n\r\nfunction ShowRow({audit}){\r\n    return (\r\n        <tr>\r\n            <td>{audit.id}</td>\r\n            <td>{audit.operation}</td>\r\n            <td>{audit.timeStamp}</td>\r\n            <td><button>History</button></td>\r\n        </tr>\r\n    )\r\n}\r\nexport default function GetAudit({audits}){\r\n    console.log(\"In UserTable\");\r\n    console.log(audits);\r\n    let rows = [];\r\n    // let functieStergere=deleteFunc;\r\n    audits.forEach(function(audit) {\r\n        rows.push(<ShowRow audit={audit} key={audit.id} />);\r\n    });\r\n    return (\r\n        <div>\r\n        <div className=\"header\">\r\n        <h1>Audit and History</h1>\r\n        </div>\r\n        <div className=\"AuditTable\">\r\n\r\n            <table className=\"center\">\r\n                <thead>\r\n                <tr>\r\n                    <th>Id</th>\r\n                    <th>Operation</th>\r\n                    <th>TimeStamp</th>\r\n                </tr>\r\n                </thead>\r\n                <tbody>{rows}</tbody>\r\n            </table>\r\n\r\n        </div>\r\n        </div>\r\n    );\r\n} \r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/routes/Audit.js b/src/routes/Audit.js
+--- a/src/routes/Audit.js	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/src/routes/Audit.js	(date 1690533382844)
+@@ -1,51 +1,67 @@
+ import React from "react";
+ import './Audit.css'
++import Sidebar from "../Sidebar";
+ 
+-export const Audit = () => {
+-    return (
+-        <div className="header">
+-        <h1>Audit and History</h1>
+-        </div>
+-    );
+-    };
++// export const Audit = () => {
++//     return (
++//         <div className="header">
++//         <h1>Audit and History</h1>
++//         </div>
++//     );
++//     };
+ 
+-function ShowRow({audit}){
++function ShowRow({audit,getFunction}){
++    function getHistoryById(event){
++        console.log('get history fot id of audit'+audit.id);
++        getFunction(audit.history.id);
++    }
+     return (
+         <tr>
+             <td>{audit.id}</td>
+             <td>{audit.operation}</td>
+             <td>{audit.timeStamp}</td>
+-            <td><button>History</button></td>
++            <td><button onClick={getHistoryById}>History</button></td>
+         </tr>
+     )
+ }
+-export default function GetAudit({audits}){
++export default function GetAudit({audits,getFunction}){
+     console.log("In UserTable");
+     console.log(audits);
+     let rows = [];
+     // let functieStergere=deleteFunc;
+     audits.forEach(function(audit) {
+-        rows.push(<ShowRow audit={audit} key={audit.id} />);
++        rows.push(<ShowRow audit={audit} key={audit.id} getFunction={getFunction}/>);
+     });
+     return (
+         <div>
+-        <div className="header">
+-        <h1>Audit and History</h1>
+-        </div>
+-        <div className="AuditTable">
+-
+-            <table className="center">
+-                <thead>
+-                <tr>
+-                    <th>Id</th>
+-                    <th>Operation</th>
+-                    <th>TimeStamp</th>
+-                </tr>
+-                </thead>
+-                <tbody>{rows}</tbody>
+-            </table>
++            <Sidebar/>
++            <div className="header">
++                <h1>Audit and History</h1>
++            </div>
++            
++            <div className="tables">
++                <div className="AuditTable">
++                    <h2>
++                        Audit
++                    </h2>
++                    <table className="center">
++                        <thead>
++                        <tr>
++                            <th>Id</th>
++                            <th>Operation</th>
++                            <th>TimeStamp</th>
++                        </tr>
++                        </thead>
++                        <tbody>{rows}</tbody>
++                    </table>
+ 
+-        </div>
++                </div>
++                <div id="historyColumn">
++                    <h2>
++                        History
++                    </h2>
++                </div>
++            </div>
+         </div>
+     );
+ } 
+Index: src/routes/Audit.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.header{\r\n    margin-left: 300px;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/routes/Audit.css b/src/routes/Audit.css
+--- a/src/routes/Audit.css	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/src/routes/Audit.css	(date 1690458370012)
+@@ -1,3 +1,9 @@
+ .header{
+     margin-left: 300px;
++}
++.tables{
++    display: flex;
++}
++.AuditTable{
++    width: 700px;
+ }
+\ No newline at end of file
+Index: src/utils/rest-calls.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { APP_BASE_URL } from \"./consts\";\r\nfunction status(response) {\r\n    console.log('response status '+response.status);\r\n    if (response.status >= 200 && response.status < 300) {\r\n        return Promise.resolve(response)\r\n    } else {\r\n        return Promise.reject(new Error(response.statusText))\r\n    }\r\n}\r\n\r\nfunction json(response) {\r\n    return response.json()\r\n}\r\n\r\nexport function GetAudits(){\r\n    let headers= new Headers();\r\n    headers.append('Accept','application/json');\r\n    let init={method:'GET',\r\n    headers: headers,\r\n    mode:'cors'\r\n    };\r\n    let url=APP_BASE_URL+\"log/audit\"\r\n    console.log(url);\r\n    let request= new Request(url,init);\r\n    console.log(\"GEt pt \"+url);\r\n    return fetch(request)\r\n        .then(status)\r\n        .then(json)\r\n        .then(data=>{\r\n            console.log(\"Request succeeded\",data);\r\n            return data;\r\n        })\r\n        .catch(error=>{\r\n            console.log(\"Error\"+error);\r\n            return Promise.reject(error);\r\n        })\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/utils/rest-calls.js b/src/utils/rest-calls.js
+--- a/src/utils/rest-calls.js	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/src/utils/rest-calls.js	(date 1690529104731)
+@@ -34,4 +34,93 @@
+             console.log("Error"+error);
+             return Promise.reject(error);
+         })
+-}
+\ No newline at end of file
++}
++
++export function GetHistoryByAuditId(id){
++    console.log("getting history");
++    let headers= new Headers();
++    headers.append('Accept','application/json');
++    let init={method:'GET',
++    headers: headers,
++    mode:'cors'
++    };
++    let url=APP_BASE_URL+'log/historyId?id='+id;
++    let request= new Request(url,init);
++    return fetch(request)
++    .then(status)
++    .then(json)
++    .then(data=>{
++        console.log("Request succeeded",data);
++        return data;
++    }) .catch(error=>{
++        console.log("Error"+error);
++        return Promise.reject(error);
++    });
++}
++
++export function GetProfileById(id){
++    console.log("getting profile");
++    let headers= new Headers();
++    headers.append('Accept','application/json');
++    let init={method:'GET',
++    headers: headers,
++    mode:'cors'
++    };
++    let url=APP_BASE_URL+'profiles/profileId?id='+id;
++    let request= new Request(url,init);
++    return fetch(request)
++    .then(status)
++    .then(json)
++    .then(data=>{
++        console.log("Request succeeded",data);
++        return data;
++    }) .catch(error=>{
++        console.log("Error"+error);
++        return Promise.reject(error);
++    });
++}
++
++export function GetUserById(id){
++    console.log("getting User");
++    let headers= new Headers();
++    headers.append('Accept','application/json');
++    let init={method:'GET',
++    headers: headers,
++    mode:'cors'
++    };
++    let url=APP_BASE_URL+'users/userId?id='+id;
++    let request= new Request(url,init);
++    return fetch(request)
++    .then(status)
++    .then(json)
++    .then(data=>{
++        console.log("Request succeeded",data);
++        return data;
++    }) .catch(error=>{
++        console.log("Error"+error);
++        return Promise.reject(error);
++    });
++}
++
++
++export function GetAllProfiles(){
++    console.log("getting profiles");
++    let headers= new Headers();
++    headers.append('Accept','application/json');
++    let init={method:'GET',
++    headers: headers,
++    mode:'cors'
++    };
++    let url=APP_BASE_URL+'profiles/list';
++    let request= new Request(url,init);
++    return fetch(request)
++    .then(status)
++    .then(json)
++    .then(data=>{
++        console.log("Request succeeded",data);
++        return data;
++    }) .catch(error=>{
++        console.log("Error"+error);
++        return Promise.reject(error);
++    }); 
++}
+Index: src/index.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\nimport ReactDOM from 'react-dom/client';\r\nimport './index.css';\r\nimport App from './App';\r\nimport reportWebVitals from './reportWebVitals';\r\n\r\nconst root = ReactDOM.createRoot(document.getElementById('root'));\r\nroot.render(\r\n  <React.StrictMode>\r\n    <App />\r\n  </React.StrictMode>\r\n);\r\n\r\n// If you want to start measuring performance in your app, pass a function\r\n// to log results (for example: reportWebVitals(console.log))\r\n// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals\r\nreportWebVitals();\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/index.js b/src/index.js
+--- a/src/index.js	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/src/index.js	(date 1690532872280)
+@@ -3,12 +3,13 @@
+ import './index.css';
+ import App from './App';
+ import reportWebVitals from './reportWebVitals';
++import {BrowserRouter as Router} from 'react-router-dom'
+ 
+ const root = ReactDOM.createRoot(document.getElementById('root'));
+ root.render(
+-  <React.StrictMode>
+-    <App />
+-  </React.StrictMode>
++  <Router>
++    <App/>
++  </Router>
+ );
+ 
+ // If you want to start measuring performance in your app, pass a function
+Index: src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import \"./App.css\";\r\nimport Sidebar from \"./Sidebar\";\r\nimport { useEffect, useState } from 'react'\r\n\r\nimport { BrowserRouter as Router, Routes, Route } from \"react-router-dom\";\r\nimport WaitingUsers from \"./routes/waitingApprovals/WaitingUsers\"\r\nimport WaitingProfiles from \"./routes/waitingApprovals/WaitingProfiles\"\r\nimport GetAudit from \"./routes/Audit.js\"\r\nimport { GetAudits } from \"./utils/rest-calls\";\r\nfunction App() {\r\n  const [audits, setAudits] = useState([\"\"])\r\n  useEffect(()=>{\r\n    console.log('use effect');\r\n    GetAudits().then(audits=>setAudits(audits));\r\n  },[])\r\nreturn (\r\n\t<Router>\r\n\t<Sidebar />\r\n\t<Routes>\r\n\t\t<Route path='/audit' element={<GetAudit audits={audits}/>} />\r\n    <Route path='/waiting/users' element={<WaitingUsers/>}/>\r\n    <Route path='/waiting/profiles' element={<WaitingProfiles/>}/>\r\n\t</Routes>\r\n\t</Router>\r\n);\r\n}\r\n\r\nexport default App;\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/App.js b/src/App.js
+--- a/src/App.js	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/src/App.js	(date 1690533087880)
+@@ -1,27 +1,85 @@
+ import "./App.css";
+ import Sidebar from "./Sidebar";
+ import { useEffect, useState } from 'react'
+-
++import CreateUserHistory from './routes/CreateUserHistory.js'
++import CreateProfileHistory from './routes/CreateProfileHistory.js'
+ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+ import WaitingUsers from "./routes/waitingApprovals/WaitingUsers"
+ import WaitingProfiles from "./routes/waitingApprovals/WaitingProfiles"
+ import GetAudit from "./routes/Audit.js"
+-import { GetAudits } from "./utils/rest-calls";
++import ReactDOM from "react-dom";
++import CreateUser  from "./routes/createEntitys/CreateUser";
++import {CreateProfile} from "./routes/createEntitys/CreateProfile";
++import { GetAudits,GetHistoryByAuditId,GetProfileById,GetUserById,GetAllProfiles } from "./utils/rest-calls";
++import Login from "./Login";
++import MainPage from "./MainPage";
+ function App() {
+   const [audits, setAudits] = useState([""])
+   useEffect(()=>{
+     console.log('use effect');
+     GetAudits().then(audits=>setAudits(audits));
+   },[])
++  const [profiles,setProfiles]=useState([""])
++  useEffect(()=>{
++    GetAllProfiles().then(profiles=>setProfiles(profiles))
++  },[])
++  const renderProfileHistory = (profileData, elementId) => {
++    ReactDOM.render(
++      <CreateProfileHistory profile={profileData} />,
++      document.getElementById(elementId)
++    );
++  };
++
++  const renderUserHistory = (userData, elementId) => {
++    ReactDOM.render(
++      <CreateUserHistory user={userData} />,
++      document.getElementById(elementId)
++    );
++  };
++function getHistoryById(id){
++  console.log('get function for history');
++  var elm=document.getElementById('historyColumn');
++
++  GetHistoryByAuditId(id)
++  .then(hist => {
++    console.log('Fetched history:', hist);
++    if(hist.typeEntity=="Profile"){
++      GetProfileById(hist.idEntity).then(
++        profileData=>{
++          renderProfileHistory(profileData,'historyColumn')
++        }
++      )
++      
++    }
++    else{
++     GetUserById(hist.idEntity).then(
++        userData=>{
++          renderUserHistory(userData,'historyColumn')
++        }
++      )
++    }
++    
++  })
++  .catch(error => {
++    console.error('Error fetching history:', error);
++  });
++}
++
++
++
+ return (
+-	<Router>
+-	<Sidebar />
++	<div>
++	
+ 	<Routes>
+-		<Route path='/audit' element={<GetAudit audits={audits}/>} />
++    <Route path="/" element={<Login/>}/>
++    <Route path="/mainPage/*" element={<MainPage/>}/>
++		<Route path='/audit' element={<GetAudit audits={audits} getFunction={getHistoryById}/>} />
+     <Route path='/waiting/users' element={<WaitingUsers/>}/>
+     <Route path='/waiting/profiles' element={<WaitingProfiles/>}/>
+-	</Routes>
+-	</Router>
++    <Route path="/create/users" element={<CreateUser profiles={profiles}/>}/>
++    <Route path="/create/profile" element={<CreateProfile/>}/>
++  </Routes>
++	</div>
+ );
+ }
+ 
+Index: src/routes/createEntitys/CreateUser.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\r\n\r\nexport const CreateUser = () => {\r\n    return (\r\n        <div className=\"header\">\r\n        <h1>Waiting Profiles</h1>\r\n        </div>\r\n    );\r\n    };\r\n\r\nexport default WaitingProfiles;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/routes/createEntitys/CreateUser.js b/src/routes/createEntitys/CreateUser.js
+--- a/src/routes/createEntitys/CreateUser.js	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/src/routes/createEntitys/CreateUser.js	(date 1690533711269)
+@@ -1,11 +1,69 @@
+ import React from "react";
++import Sidebar from "../../Sidebar";
+ 
+-export const CreateUser = () => {
++
++function AddOption({optionP}){
+     return (
+-        <div className="header">
+-        <h1>Waiting Profiles</h1>
++        <option value={optionP.id}>Name:{optionP.name} Status:{optionP.status} Type:{optionP.type}</option>
++    )
++}
++
++export default function CreateUser({profiles}){
++    let options=[];
++    profiles.forEach(function(profile){
++        options.push(<AddOption optionP={profile} key={profile.id}/>);
++    });
++    return (
++
++        <div >
++            <Sidebar/>
++        <h1>Create User</h1>
++        <form>
++            <h2>Details:</h2>
++            <label >
++                Full name:
++                <input type="text" id="fullname" name="fullname"></input>
++            </label><br/>
++            
++            <label >Email:
++                <input type="email" id="emailField" name="emailField"></input>
++            </label><br/>
++            
++            <label >Phone:
++                <input type="tel" id="phoneField" name="phoneField"></input>
++            </label><br/>
++            
++            <label >Username:
++                <input type="text" id="username" name="username"></input>
++            </label><br/>
++            
++            <label >Email:
++                <input type="email" id="emailField" name="emailField"></input> 
++            </label><br/>
++            <h2>Addres:</h2>
++            <label >
++                Country:
++                <input type="text" id="country" name="country"></input>
++            </label><br/>
++            <label >
++                City:
++                <input type="text" id="city" name="city"></input>
++            </label><br/>  
++            <label >
++                Street:
++                <input type="text" id="street" name="treet"></input>
++            </label><br/>                 
++            <label >
++                Street number:
++                <input type="number" id="streetNr" name="streetNr"></input>
++            </label><br/>  
++            <h2>Profile:</h2>
++            <select>
++                {options}
++            </select>  
++            <input type="submit" value="Add user" />
++        </form>
+         </div>
+     );
+     };
+ 
+-export default WaitingProfiles;
+\ No newline at end of file
+Index: src/routes/createEntitys/CreateProfile.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/routes/createEntitys/CreateProfile.js b/src/routes/createEntitys/CreateProfile.js
+--- a/src/routes/createEntitys/CreateProfile.js	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/src/routes/createEntitys/CreateProfile.js	(date 1690533734717)
+@@ -1,0 +1,44 @@
++import React from "react";
++import Sidebar from "../../Sidebar";
++
++export const CreateProfile = () => {
++    return (
++
++        <div >
++        <Sidebar/>
++        <h1>Create Profile</h1>
++        <form>
++            <h2>Details:</h2>
++            <label >
++                Name:
++                <input type="text" id="fullname" name="fullname"></input>
++            </label><br/>
++            
++            <label >Type:
++                <select>
++                    <option value="Administrator">Administrator</option>
++                    <option value="Employee">Employee</option>
++                    <option value="Customer">Customer</option>
++                </select>
++            </label><br/>
++            <h3>Rights:</h3>
++            <label>Craete User<input type="checkbox"></input></label><br/>
++            <label>Modify User<input type="checkbox"></input></label><br/>
++            <label>Repair User<input type="checkbox"></input></label><br/>
++            <label>Block User<input type="checkbox"></input></label><br/>
++            <label>Unblock User<input type="checkbox"></input></label><br/>
++            <label>Delete User<input type="checkbox"></input></label><br/>
++            <label>Craete Profile Customer<input type="checkbox"></input></label><br/>
++            <label>Craete Profile Employee<input type="checkbox"></input></label><br/>
++            <label>Modify Profile Customer<input type="checkbox"></input></label><br/>
++            <label>Modify Profile Employee<input type="checkbox"></input></label><br/>
++            <label>Delete Profile Customer<input type="checkbox"></input></label><br/>
++            <label>Delete Profile Employee<input type="checkbox"></input></label><br/>
++
++            <input type="submit" value="Add user" />
++        </form>
++        </div>
++    );
++    };
++
++export default CreateProfile;
+\ No newline at end of file
+Index: src/SidebarData.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\r\nimport * as FaIcons from \"react-icons/fa\";\r\nimport * as AiIcons from \"react-icons/ai\";\r\nimport * as IoIcons from \"react-icons/io\";\r\nimport * as RiIcons from \"react-icons/ri\";\r\n\r\n\r\nexport const SidebarData = [\r\n{\r\n\ttitle: \"Waiting approvals\",\r\n\tpath: \"/waiting\",\r\n\ticon: <IoIcons.IoIosCheckmarkCircleOutline />,\r\n\ticonClosed: <RiIcons.RiArrowDownSFill />,\r\n\ticonOpened: <RiIcons.RiArrowUpSFill />,\r\n\r\n\tsubNav: [\r\n\t{\r\n\t\ttitle: \"Users\",\r\n\t\tpath: \"/waiting/users\",\r\n\t\ticon: <FaIcons.FaUser />,\r\n\t},\r\n\t{\r\n\t\ttitle: \"Profiles\",\r\n\t\tpath: \"/waiting/profiles\",\r\n\t\ticon: <AiIcons.AiFillProfile />,\r\n\t},\r\n\t],\r\n},\r\n{\r\n\ttitle: \"Audit\",\r\n\tpath: \"/audit\",\r\n\ticon: <FaIcons.FaHistory />,\r\n\t\r\n},\r\n{\r\n\ttitle: \"Create\",\r\n\tpath: \"/create\",\r\n\ticon: <IoIcons.IoMdCreate />,\r\n\ticonClosed: <RiIcons.RiArrowDownSFill />,\r\n\ticonOpened: <RiIcons.RiArrowUpSFill />,\r\n\r\n\tsubNav: [\r\n\t{\r\n\t\ttitle: \"Users\",\r\n\t\tpath: \"/create/users\",\r\n\t\ticon: <FaIcons.FaUser />,\r\n\t},\r\n\t{\r\n\t\ttitle: \"Profiles\",\r\n\t\tpath: \"/creatae/users\",\r\n\t\ticon: <AiIcons.AiFillProfile />,\r\n\t},\r\n\t],\r\n},\r\n// {\r\n// \ttitle: \"Contact\",\r\n// \tpath: \"/contact\",\r\n// \ticon: <FaIcons.FaPhone />,\r\n// },\r\n// {\r\n// \ttitle: \"Events\",\r\n// \tpath: \"/events\",\r\n// \ticon: <FaIcons.FaEnvelopeOpenText />,\r\n\r\n// \ticonClosed: <RiIcons.RiArrowDownSFill />,\r\n// \ticonOpened: <RiIcons.RiArrowUpSFill />,\r\n\r\n// \tsubNav: [\r\n// \t{\r\n// \t\ttitle: \"Event 1\",\r\n// \t\tpath: \"/events/events1\",\r\n// \t\ticon: <IoIcons.IoIosPaper />,\r\n// \t},\r\n// \t{\r\n// \t\ttitle: \"Event 2\",\r\n// \t\tpath: \"/events/events2\",\r\n// \t\ticon: <IoIcons.IoIosPaper />,\r\n// \t},\r\n// \t],\r\n// },\r\n// {\r\n// \ttitle: \"Support\",\r\n// \tpath: \"/support\",\r\n// \ticon: <IoIcons.IoMdHelpCircle />,\r\n// },\r\n];\r\nexport default SidebarData;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/SidebarData.js b/src/SidebarData.js
+--- a/src/SidebarData.js	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/src/SidebarData.js	(date 1690533629355)
+@@ -34,7 +34,7 @@
+ },
+ {
+ 	title: "Create",
+-	path: "/create",
++	path: "/create/users",
+ 	icon: <IoIcons.IoMdCreate />,
+ 	iconClosed: <RiIcons.RiArrowDownSFill />,
+ 	iconOpened: <RiIcons.RiArrowUpSFill />,
+@@ -47,7 +47,7 @@
+ 	},
+ 	{
+ 		title: "Profiles",
+-		path: "/creatae/users",
++		path: "/create/profile",
+ 		icon: <AiIcons.AiFillProfile />,
+ 	},
+ 	],
+Index: package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"name\": \"internship-frontend\",\r\n  \"version\": \"0.1.0\",\r\n  \"private\": true,\r\n  \"dependencies\": {\r\n    \"@testing-library/jest-dom\": \"^5.17.0\",\r\n    \"@testing-library/react\": \"^13.4.0\",\r\n    \"@testing-library/user-event\": \"^13.5.0\",\r\n    \"react\": \"^18.2.0\",\r\n    \"react-burger-menu\": \"^3.0.9\",\r\n    \"react-dom\": \"^18.2.0\",\r\n    \"react-icons\": \"^4.10.1\",\r\n    \"react-router-dom\": \"^6.14.2\",\r\n    \"react-scripts\": \"5.0.1\",\r\n    \"styled-components\": \"^6.0.5\",\r\n    \"web-vitals\": \"^2.1.4\"\r\n  },\r\n  \"scripts\": {\r\n    \"start\": \"react-scripts start\",\r\n    \"build\": \"react-scripts build\",\r\n    \"test\": \"react-scripts test\",\r\n    \"eject\": \"react-scripts eject\"\r\n  },\r\n  \"eslintConfig\": {\r\n    \"extends\": [\r\n      \"react-app\",\r\n      \"react-app/jest\"\r\n    ]\r\n  },\r\n  \"browserslist\": {\r\n    \"production\": [\r\n      \">0.2%\",\r\n      \"not dead\",\r\n      \"not op_mini all\"\r\n    ],\r\n    \"development\": [\r\n      \"last 1 chrome version\",\r\n      \"last 1 firefox version\",\r\n      \"last 1 safari version\"\r\n    ]\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package.json b/package.json
+--- a/package.json	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/package.json	(date 1690533182978)
+@@ -6,6 +6,7 @@
+     "@testing-library/jest-dom": "^5.17.0",
+     "@testing-library/react": "^13.4.0",
+     "@testing-library/user-event": "^13.5.0",
++    "axios": "^1.4.0",
+     "react": "^18.2.0",
+     "react-burger-menu": "^3.0.9",
+     "react-dom": "^18.2.0",
+Index: package-lock.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/package-lock.json b/package-lock.json
+--- a/package-lock.json	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/package-lock.json	(date 1690533185683)
+@@ -11,6 +11,7 @@
+         "@testing-library/jest-dom": "^5.17.0",
+         "@testing-library/react": "^13.4.0",
+         "@testing-library/user-event": "^13.5.0",
++        "axios": "^1.4.0",
+         "react": "^18.2.0",
+         "react-burger-menu": "^3.0.9",
+         "react-dom": "^18.2.0",
+@@ -5506,6 +5507,29 @@
+         "node": ">=4"
+       }
+     },
++    "node_modules/axios": {
++      "version": "1.4.0",
++      "resolved": "https://registry.npmjs.org/axios/-/axios-1.4.0.tgz",
++      "integrity": "sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==",
++      "dependencies": {
++        "follow-redirects": "^1.15.0",
++        "form-data": "^4.0.0",
++        "proxy-from-env": "^1.1.0"
++      }
++    },
++    "node_modules/axios/node_modules/form-data": {
++      "version": "4.0.0",
++      "resolved": "https://registry.npmjs.org/form-data/-/form-data-4.0.0.tgz",
++      "integrity": "sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==",
++      "dependencies": {
++        "asynckit": "^0.4.0",
++        "combined-stream": "^1.0.8",
++        "mime-types": "^2.1.12"
++      },
++      "engines": {
++        "node": ">= 6"
++      }
++    },
+     "node_modules/axobject-query": {
+       "version": "3.2.1",
+       "resolved": "https://registry.npmjs.org/axobject-query/-/axobject-query-3.2.1.tgz",
+@@ -14538,6 +14562,11 @@
+         "node": ">= 0.10"
+       }
+     },
++    "node_modules/proxy-from-env": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/proxy-from-env/-/proxy-from-env-1.1.0.tgz",
++      "integrity": "sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg=="
++    },
+     "node_modules/psl": {
+       "version": "1.9.0",
+       "resolved": "https://registry.npmjs.org/psl/-/psl-1.9.0.tgz",
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"b650141a-d826-4b83-847d-65cf3a769371\" name=\"Changes\" comment=\"DASda\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"FrontEnd\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2T9SjhFnO8kJIFs50XfOB2QNL3S\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"WebServerToolWindowFactoryState\": \"false\",\r\n    \"last_opened_file_path\": \"C:/Users/Victor/Desktop/intership/internship-frontend\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\"\r\n  }\r\n}]]></component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"b650141a-d826-4b83-847d-65cf3a769371\" name=\"Changes\" comment=\"\" />\r\n      <created>1690453952370</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1690453952370</updated>\r\n      <workItem from=\"1690453958587\" duration=\"1015000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"DASda\">\r\n      <created>1690454663163</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1690454663163</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"CUSTOM_BOOLEAN_PROPERTIES\">\r\n                <map>\r\n                  <entry key=\"Show.Git.Branches\" value=\"false\" />\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"DASda\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"DASda\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 5a4c4b13dfda8483b37a8540b42c458b5640e1ef)
++++ b/.idea/workspace.xml	(date 1690456119841)
+@@ -1,7 +1,9 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ChangeListManager">
+-    <list default="true" id="b650141a-d826-4b83-847d-65cf3a769371" name="Changes" comment="DASda" />
++    <list default="true" id="b650141a-d826-4b83-847d-65cf3a769371" name="Changes" comment="DASda">
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -23,17 +25,17 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "WebServerToolWindowFactoryState": "false",
+-    "last_opened_file_path": "C:/Users/Victor/Desktop/intership/internship-frontend",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/Victor/Desktop/intership/internship-frontend&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+@@ -42,7 +44,8 @@
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+       <updated>1690453952370</updated>
+-      <workItem from="1690453958587" duration="1015000" />
++      <workItem from="1690453958587" duration="1642000" />
++      <workItem from="1690456002492" duration="116000" />
+     </task>
+     <task id="LOCAL-00001" summary="DASda">
+       <created>1690454663163</created>

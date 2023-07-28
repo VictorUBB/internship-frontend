@@ -34,7 +34,7 @@ export const SidebarData = [
 },
 {
 	title: "Create",
-	path: "/create",
+	path: "/create/users",
 	icon: <IoIcons.IoMdCreate />,
 	iconClosed: <RiIcons.RiArrowDownSFill />,
 	iconOpened: <RiIcons.RiArrowUpSFill />,
@@ -47,7 +47,7 @@ export const SidebarData = [
 	},
 	{
 		title: "Profiles",
-		path: "/creatae/users",
+		path: "/create/profile",
 		icon: <AiIcons.AiFillProfile />,
 	},
 	],
